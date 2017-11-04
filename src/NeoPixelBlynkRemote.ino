@@ -1,6 +1,27 @@
-
+// This #include statement was automatically added by the Particle IDE.
 #include <neopixel.h>
 #define PIN 2
+
+/*************************************************************
+  Blynk is a platform with iOS and Android apps to control
+  Arduino, Raspberry Pi and the likes over the Internet.
+  You can easily build graphic interfaces for all your
+  projects by simply dragging and dropping widgets.
+
+    Downloads, docs, tutorials: http://www.blynk.cc
+    Sketch generator:           http://examples.blynk.cc
+    Blynk community:            http://community.blynk.cc
+    Follow us:                  http://www.fb.com/blynkapp
+                                http://twitter.com/blynk_app
+
+  Blynk library is licensed under MIT license
+  This example code is in public domain.
+
+ *************************************************************
+
+  No coding required for direct digital/analog pin operations!
+
+ *************************************************************/
 
 #define BLYNK_PRINT Serial  // Set serial output for debug prints
 #define BLYNK_DEBUG       // Uncomment this to see detailed prints
@@ -11,11 +32,22 @@
 #define PIXEL_COUNT 64
 #define PIXEL_PIN D2
 #define PIXEL_TYPE WS2812B
+
 Adafruit_NeoPixel strip(PIXEL_COUNT, PIXEL_PIN, PIXEL_TYPE);
 
 
+// You should get Auth Token in the Blynk App.
+// Go to the Project Settings (nut icon).
 char auth[] = "9ed76d258e464555ba1c0537cbbb8f61";
 
+
+BlynkTimer timer;
+int uptimeCounter;
+
+
+// Attach a Button widget (mode: Switch) to the Digital pin 7 - and control the built-in blue led.
+// Attach a Graph widget to Analog pin 1
+// Attach a Gauge widget to Analog pin 2
 
 void setup()
 {
@@ -24,8 +56,29 @@ void setup()
     strip.begin();
     strip.show();
     Blynk.begin(auth);
+    timer.setInterval(1000L, increment);
 }
 
+void increment() {
+  uptimeCounter++;
+
+}
+void publishUptime() {
+     unsigned long now = millis();
+     unsigned long lastTime;
+    //Every 30 seconds publish uptime
+    if (now-lastTime>30000UL) {
+        lastTime = now;
+        // now is in milliseconds
+        unsigned nowSec = now/1000UL;
+        unsigned sec = nowSec%60;
+        unsigned min = (nowSec%3600)/60;
+        unsigned hours = (nowSec%86400)/3600;
+        char* publishString;
+        sprintf(publishString,"%u:%u:%u",hours,min,sec);
+        Particle.publish("Uptime",publishString);
+    }
+}
 /* Attach a Button widget (mode: Push) to the Virtual pin 1 - and send sweet tweets!
 BLYNK_WRITE(V1) {
     if (param.asInt() == 1) { // On button down...
@@ -79,4 +132,5 @@ BLYNK_WRITE(V3)
 void loop()
 {
     Blynk.run();
+    timer.run();
 }
