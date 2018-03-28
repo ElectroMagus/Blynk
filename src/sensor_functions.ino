@@ -2,8 +2,8 @@
 #include <Adafruit_MQTT.h>
 #define AIO_SERVER      "io.adafruit.com"
 #define AIO_SERVERPORT  1883                   // use 8883 for SSL
-#define AIO_USERNAME    "rickysalmon"
-#define AIO_KEY         "aa3704dd4abd884c158c2b0e716ca9179beaf110"
+#define AIO_USERNAME    "CHANGE"
+#define AIO_KEY         "CHANGE"
 
 #include "Adafruit_MQTT/Adafruit_MQTT.h"
 #include "Adafruit_MQTT/Adafruit_MQTT_SPARK.h"
@@ -32,7 +32,7 @@ Adafruit_NeoPixel strip(PIXEL_COUNT, PIXEL_PIN, PIXEL_TYPE);
 #define BLYNK_PRINT Serial  // Set serial output for debug prints
 //#define BLYNK_DEBUG       // Uncomment this to see detailed prints
 #include <blynk.h>
-char auth[] = "9ed76d258e464555ba1c0537cbbb8f61";
+char auth[] = "CHANGE";
 BlynkTimer timer;
 int uptimeCounter;
 
